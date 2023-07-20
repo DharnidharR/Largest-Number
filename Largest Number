@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int compare(const void* a, const void* b) {
+    char ab[20], ba[20];
+    sprintf(ab, "%d%d", *(const int*)a, *(const int*)b);
+    sprintf(ba, "%d%d", *(const int*)b, *(const int*)a);
+    return strcmp(ba, ab);
+}
+char* largestNumber(int* nums, int numsSize) {
+    if (numsSize == 0)
+        return "0";
+    qsort(nums, numsSize, sizeof(int), compare);
+    char* result = (char*)malloc(numsSize * 10 + 1);
+    result[0] = '\0';
+    for (int i = 0; i < numsSize; i++) {
+        char temp[11];
+        sprintf(temp, "%d", nums[i]);
+        strcat(result, temp);
+    }
+    int i = 0, j = 0;
+    while (result[j] == '0')
+        j++;
+    if (result[j] == '\0')
+        return "0";
+    char* finalResult = (char*)malloc(strlen(result) - j + 1);
+    while (result[j] != '\0')
+        finalResult[i++] = result[j++];
+    finalResult[i] = '\0';
+    free(result);
+    return finalResult;
+}
+int main() {
+    int n;
+    printf("Enter the number of elements in the array: ");
+    scanf("%d", &n);
+    int nums[n];
+    printf("Enter the elements of the array: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &nums[i]);
+    }
+    char* result = largestNumber(nums, n);
+    printf("Largest Number: %s\n", result);
+    free(result);
+    return 0;
+}
